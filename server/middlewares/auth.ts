@@ -22,16 +22,17 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
             return;
            }
             req.user = user;
-            next()
+            return next();
         } catch (error) {
            console.error("Auth Middleware Error:", error);
            res.status(401).json({ message: "Not authorized, token failed"});
            return;
         }
       }
-      if(!token){
-        res.status(401).json({message: "Not authorized, no token"})
-      }
+      if (!token) {
+    res.status(401).json({ message: "Not authorized, no token" });
+    return;
+  }
 }
 
 export const adminOnly = (req: AuthRequest, res: Response, next: NextFunction): void=>{

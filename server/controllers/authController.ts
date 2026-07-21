@@ -105,7 +105,7 @@ export const getMe = async (req: AuthRequest, res: Response): Promise<void> => {
         res.json(req.user)
     } catch (error: any) {
        console.error(error);
-       req.statusCode(400).json({ message: error.message })
+       res.status(400).json({ message: error.message });
     }
     
 }
