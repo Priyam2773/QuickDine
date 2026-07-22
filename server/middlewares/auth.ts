@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
+import jwt from "jsonwebtoken";
 import { IUser, User } from "../models/user.js";
+
 
 
 export interface AuthRequest extends Request{ 
@@ -8,7 +10,7 @@ export interface AuthRequest extends Request{
 
 export const protect = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> =>   {
     let token;
-      if(req.headers.authorization && req.headers.authorization.startsWith("Bearer")){
+      if(req.headers.authorization && req.headers.authorization.startsWith("Bearer ")){
         try{
             //Get token from header
             token = req.headers.authorization.split(" ")[1];
@@ -37,7 +39,7 @@ export const protect = async (req: AuthRequest, res: Response, next: NextFunctio
 
 export const adminOnly = (req: AuthRequest, res: Response, next: NextFunction): void=>{
     if(req.user && req.user.role === "admin"){
-        next()
+         next()
     }else{
         res.status(403).json({ message: "Access denied, admin role required"});
     }

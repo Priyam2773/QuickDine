@@ -3,7 +3,7 @@ import crypto from "crypto";
 
 export interface IBooking extends Document{ 
     user: Types.ObjectId;
-    restaurent: Types.ObjectId;
+    restaurant: Types.ObjectId;
     date: Date;
     time: string;
     guests: number;
@@ -18,7 +18,7 @@ export interface IBooking extends Document{
 const BookingSchema = new Schema<IBooking>(
     {
        user: { type: Schema.Types.ObjectId, ref: "User", required: true},
-       restaurent: { type: Schema.Types.ObjectId, ref: "Restaurent", required: true },
+       restaurant: { type: Schema.Types.ObjectId, ref: "Restaurant", required: true },
        date: { type: Date , required: true},
        time: { type: String , required: true},
        guests: { type: Number, required: true, min: 1},
