@@ -30,7 +30,7 @@ app.use("/api/owner", ownerRouter)
 app.use("/api/admin", adminRouter)
 
 //Globlal Error Handler
-app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     console.error("Unhandle Error:", err);
     res.status(500).json({
         message: err.message || "Internal Server Error",
@@ -42,3 +42,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction)=>{
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
+export default app;
