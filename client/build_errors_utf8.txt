@@ -1,0 +1,6 @@
+
+> QuickDine@0.0.0 build
+> tsc -b && vite build
+
+src/pages/admin/AdminDashboard.tsx(12,1): error TS6192: All imports in import declaration are unused.
+src/pages/Dashboard.tsx(11,1): error TS6192: All imports in import declaration are unused.

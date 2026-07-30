@@ -9,7 +9,6 @@ import { ShieldCheckIcon, CheckCircleIcon, BarChart3Icon } from "lucide-react";
 // Subcomponents
 import AdminApprovals from "../../components/admin/AdminApprovals.tsx";
 import AdminStats from "../../components/admin/AdminStats.tsx";
-import { dummyAdminStats, dummyRestaurant } from "../../assets/assets.ts";
 import api from "../../lib/api.ts";
 import toast from "react-hot-toast";
 
@@ -31,28 +30,28 @@ export default function AdminDashboard() {
             setStats(sRes.data)
         } catch (error: any) {
             toast.error(error?.response?.data?.message || error?.message);
-        }finally{
+        } finally {
             setLoading(false)
         }
-        
+
     };
     const handleApproveStatus = async (restaurantId: string, status: "approved" | "rejected") => {
-       try {
-         setBtnLoading(restaurantId);
-         await api.put(`/admin/restaurants/${restaurantId}/approve`, {status})
-        toast.success(`Restaurant has been marked as ${status.toUpperCase()}`)
+        try {
+            setBtnLoading(restaurantId);
+            await api.put(`/admin/restaurants/${restaurantId}/approve`, { status })
+            toast.success(`Restaurant has been marked as ${status.toUpperCase()}`)
 
-        // Reload local list and stats
-        const rRes = await api.get("/admin/restaurants") 
-        setRestaurants(rRes.data)
+            // Reload local list and stats
+            const rRes = await api.get("/admin/restaurants")
+            setRestaurants(rRes.data)
 
-        const sRes = await api.get("/admin/stats")
+            const sRes = await api.get("/admin/stats")
             setStats(sRes.data)
-       } catch (error: any) {
+        } catch (error: any) {
             toast.error(error?.response?.data?.message || "Failed to update restaurant approval status ");
-       } finally{
-           setBtnLoading(null);
-       }
+        } finally {
+            setBtnLoading(null);
+        }
     };
     useEffect(() => {
         (async () => await fetchAdminData())();
@@ -95,18 +94,16 @@ export default function AdminDashboard() {
                         <nav className="flex flex-col gap-1.5">
                             <button
                                 onClick={() => setActiveTab("approvals")}
-                                className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-medium tracking-wider uppercase text-left rounded-sm cursor-pointer transition-colors ${
-                                    activeTab === "approvals" ? "bg-primary text-white" : "text-black/55 hover:bg-surface"
-                                }`}
+                                className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-medium tracking-wider uppercase text-left rounded-sm cursor-pointer transition-colors ${activeTab === "approvals" ? "bg-primary text-white" : "text-black/55 hover:bg-surface"
+                                    }`}
                             >
                                 <CheckCircleIcon size={14} />
                                 Approvals ({pendingRestaurants.length} Pending)
                             </button>
                             <button
                                 onClick={() => setActiveTab("stats")}
-                                className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-medium tracking-wider uppercase text-left rounded-sm cursor-pointer transition-colors ${
-                                    activeTab === "stats" ? "bg-primary text-white" : "text-black/55 hover:bg-surface"
-                                }`}
+                                className={`w-full flex items-center gap-3 px-4 py-3 text-xs font-medium tracking-wider uppercase text-left rounded-sm cursor-pointer transition-colors ${activeTab === "stats" ? "bg-primary text-white" : "text-black/55 hover:bg-surface"
+                                    }`}
                             >
                                 <BarChart3Icon size={14} />
                                 Analytics & Stats

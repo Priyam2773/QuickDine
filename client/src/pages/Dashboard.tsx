@@ -8,7 +8,6 @@ import RestaurantCard from "../components/RestaurantCard.tsx";
 import AuthModal from "../components/AuthModal.tsx";
 import { CalendarIcon, UsersIcon, ClockIcon, MapPinIcon, CalendarDaysIcon } from "lucide-react";
 import toast from "react-hot-toast";
-import { dummyFeaturedRestaurants, dummyMyBookingsData } from "../assets/assets.ts";
 import api from "../lib/api.ts";
 
 export default function Dashboard() {
@@ -21,17 +20,17 @@ export default function Dashboard() {
     // Fetch user bookings
     useEffect(() => {
         const fetchBookings = async () => {
-         try {
-            setLoadingBookings(true);
-            const res = await api.get("/bookings/my")
-            setBookings(res.data)
-         } catch (error: any) {
-            toast.error(error?.response?.data?.message || error?.message);
-            
-         } finally{
-            setLoadingBookings(false)
-         }
-     };
+            try {
+                setLoadingBookings(true);
+                const res = await api.get("/bookings/my")
+                setBookings(res.data)
+            } catch (error: any) {
+                toast.error(error?.response?.data?.message || error?.message);
+
+            } finally {
+                setLoadingBookings(false)
+            }
+        };
         if (user) {
             fetchBookings();
         }
@@ -40,12 +39,12 @@ export default function Dashboard() {
     // Fetch generic recommendations
     useEffect(() => {
         const fetchRecommendations = async () => {
-           try {
-             const res = await api.get("/restaurants/featured")
-             setRecommendations(res.data)
-           } catch (error: any) {
-               toast.error(error?.response?.data?.message || error?.message);
-           }
+            try {
+                const res = await api.get("/restaurants/featured")
+                setRecommendations(res.data)
+            } catch (error: any) {
+                toast.error(error?.response?.data?.message || error?.message);
+            }
         };
         fetchRecommendations();
     }, []);
@@ -56,10 +55,10 @@ export default function Dashboard() {
         }
 
         try {
-            
+
             await api.put(`/bookings/${bookingId}/cancle`)
             // Update local state
-            setBookings((prev)=> prev.map((b)=>(b._id === bookingId ? {...b, status: "cancelled"} : b)))
+            setBookings((prev) => prev.map((b) => (b._id === bookingId ? { ...b, status: "cancelled" } : b)))
 
             toast.success("Resveration cancelled successfully");
         } catch (error: any) {
@@ -184,55 +183,54 @@ export default function Dashboard() {
                             {loadingBookings
                                 ? null
                                 : pastBookings.length !== 0 && (
-                                      <>
-                                          <h3 className="font-display text-lg font-medium text-primary">Dining History</h3>
-                                          <div className="bg-white border border-outline-variant/20 rounded-md overflow-hidden shadow-sm">
-                                              <table className="w-full text-left text-xs border-collapse">
-                                                  <thead>
-                                                      <tr className="bg-surface-container-low border-b border-outline-variant/10 text-[10px] font-medium tracking-wider text-black/55 uppercase">
-                                                          <th className="p-4">Restaurant</th>
-                                                          <th className="p-4">Date & Time</th>
-                                                          <th className="p-4">Party</th>
-                                                          <th className="p-4">Status</th>
-                                                      </tr>
-                                                  </thead>
-                                                  <tbody className="divide-y divide-outline-variant/10">
-                                                      {pastBookings.map((b) => (
-                                                          <tr key={b._id} className="hover:bg-surface/50">
-                                                              <td className="p-4 font-medium text-primary">
-                                                                  <Link
-                                                                      to={`/restaurant/${b.restaurant?.slug}`}
-                                                                      className="hover:text-secondary"
-                                                                  >
-                                                                      {b.restaurant?.name}
-                                                                  </Link>
-                                                              </td>
-                                                              <td className="p-4">
-                                                                  {new Date(b.date).toLocaleDateString()} at {b.time} PM
-                                                              </td>
-                                                              <td className="p-4">
-                                                                  {b.guests} {b.guests === 1 ? "Guest" : "Guests"}
-                                                              </td>
-                                                              <td className="p-4">
-                                                                  <span
-                                                                      className={`inline-block py-0.5 px-2 text-[9px] font-medium tracking-wider uppercase rounded-sm ${
-                                                                          b.status === "confirmed"
-                                                                              ? "bg-secondary-container/30 text-on-secondary-container"
-                                                                              : b.status === "completed"
+                                    <>
+                                        <h3 className="font-display text-lg font-medium text-primary">Dining History</h3>
+                                        <div className="bg-white border border-outline-variant/20 rounded-md overflow-hidden shadow-sm">
+                                            <table className="w-full text-left text-xs border-collapse">
+                                                <thead>
+                                                    <tr className="bg-surface-container-low border-b border-outline-variant/10 text-[10px] font-medium tracking-wider text-black/55 uppercase">
+                                                        <th className="p-4">Restaurant</th>
+                                                        <th className="p-4">Date & Time</th>
+                                                        <th className="p-4">Party</th>
+                                                        <th className="p-4">Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody className="divide-y divide-outline-variant/10">
+                                                    {pastBookings.map((b) => (
+                                                        <tr key={b._id} className="hover:bg-surface/50">
+                                                            <td className="p-4 font-medium text-primary">
+                                                                <Link
+                                                                    to={`/restaurant/${b.restaurant?.slug}`}
+                                                                    className="hover:text-secondary"
+                                                                >
+                                                                    {b.restaurant?.name}
+                                                                </Link>
+                                                            </td>
+                                                            <td className="p-4">
+                                                                {new Date(b.date).toLocaleDateString()} at {b.time} PM
+                                                            </td>
+                                                            <td className="p-4">
+                                                                {b.guests} {b.guests === 1 ? "Guest" : "Guests"}
+                                                            </td>
+                                                            <td className="p-4">
+                                                                <span
+                                                                    className={`inline-block py-0.5 px-2 text-[9px] font-medium tracking-wider uppercase rounded-sm ${b.status === "confirmed"
+                                                                            ? "bg-secondary-container/30 text-on-secondary-container"
+                                                                            : b.status === "completed"
                                                                                 ? "bg-green-100 text-green-800"
                                                                                 : "bg-error-container text-on-error-container"
-                                                                      }`}
-                                                                  >
-                                                                      {b.status}
-                                                                  </span>
-                                                              </td>
-                                                          </tr>
-                                                      ))}
-                                                  </tbody>
-                                              </table>
-                                          </div>
-                                      </>
-                                  )}
+                                                                        }`}
+                                                                >
+                                                                    {b.status}
+                                                                </span>
+                                                            </td>
+                                                        </tr>
+                                                    ))}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </>
+                                )}
                         </div>
                     </div>
 

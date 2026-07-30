@@ -1,0 +1,4 @@
+../client/src/assets/assets.ts(1,25): error TS2307: Cannot find module './hero_bg_img.png' or its corresponding type declarations.
+../client/src/assets/assets.ts(2,36): error TS2307: Cannot find module './default_restaurant_Img.jpeg' or its corresponding type declarations.
+../client/src/assets/assets.ts(3,36): error TS2307: Cannot find module './membership_section_img.png' or its corresponding type declarations.
+../client/src/lib/api.ts(5,26): error TS2339: Property 'env' does not exist on type 'ImportMeta'.
