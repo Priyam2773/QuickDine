@@ -12,7 +12,11 @@ import adminRouter from "./routes/adminRoutes.js";
 const app = express();
 
 // Connect to MongoDB
-await connectDB()
+try {
+    await connectDB();
+} catch (err) {
+    console.error("Failed to connect to MongoDB:", err);
+}
 
 // Middleware
 app.use(cors())
@@ -39,8 +43,10 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 
 })
 
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+    app.listen(port, () => {
+        console.log(`Server is running at http://localhost:${port}`);
+    });
+}
 
 export default app;
