@@ -1,6 +1,6 @@
-import {Document, model, Schema, Types} from 'mongoose'
+import { Document, model, Schema, Types } from 'mongoose'
 
-export interface IRestaurant extends Document{ 
+export interface IRestaurant extends Document {
     name: string;
     slug: string;
     description: string;
@@ -17,7 +17,7 @@ export interface IRestaurant extends Document{
     featured: boolean;
     exclusive: boolean;
     owner: Types.ObjectId;
-    status: "pending" | "appeoved" | "rejected";
+    status: "pending" | "approved" | "rejected";
     totalSeats: number;
     createdAt: Date;
     updatedAt: Date;
@@ -31,25 +31,25 @@ export interface IRestaurant extends Document{
 
 const RestaurantSchema = new Schema<IRestaurant>(
     {
-       name: { type: String, required: true, trim: true },
-       slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
-       description: { type: String, required: true },
-       cuisine: { type: String, required: true, trim: true },
-       priceRange: { type: String, enum: ["$" , "$$" , "$$$", "$$$$"], required: true },
-       rating: {type: Number, default: 5.0, min: 1, max:5},
-       reviewCount: { type: Number, default: 0},
-       location: { type: String, required: true, trim: true},
-       address: { type: String, required: true},
-       image: { type: String, required: true},
-       tags: [{ type: String}],
-       avilableSlots: [{ type: Boolean}],
-       featured: { type: Boolean, default: false},
-       exclusive: { type: Boolean, default: false},
-       owner: { type: Schema.Types.ObjectId, ref: "User", required: true},
-       status: { type: String, enum: ["pending" , "approved" , "rejected"], default:"pending" },
-       totalSeats: { type: Number, default: 20},
+        name: { type: String, required: true, trim: true },
+        slug: { type: String, required: true, unique: true, trim: true, lowercase: true },
+        description: { type: String, required: true },
+        cuisine: { type: String, required: true, trim: true },
+        priceRange: { type: String, enum: ["$", "$$", "$$$", "$$$$"], required: true },
+        rating: { type: Number, default: 5.0, min: 1, max: 5 },
+        reviewCount: { type: Number, default: 0 },
+        location: { type: String, required: true, trim: true },
+        address: { type: String, required: true },
+        image: { type: String, required: true },
+        tags: [{ type: String }],
+        avilableSlots: [{ type: Boolean }],
+        featured: { type: Boolean, default: false },
+        exclusive: { type: Boolean, default: false },
+        owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
+        status: { type: String, enum: ["pending", "approved", "rejected"], default: "pending" },
+        totalSeats: { type: Number, default: 20 },
     },
-    {timestamps: true}
+    { timestamps: true }
 )
 
 

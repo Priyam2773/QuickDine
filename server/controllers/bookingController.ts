@@ -7,28 +7,28 @@ import { Booking } from "../models/Booking.js";
 // @access Private
 export const createBooking = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-        
-        const {restaurantId, date, time, guests, occasion, specialRequests} = req.body;
 
-        if(!restaurantId || !date || !time || !guests){
-            res.status(400).json({ message: "Please provide all required reservation details"});
+        const { restaurantId, date, time, guests, occasion, specialRequests } = req.body;
+
+        if (!restaurantId || !date || !time || !guests) {
+            res.status(400).json({ message: "Please provide all required reservation details" });
             return;
         }
         // Check if restaurant exists
         const restaurant = await Restaurant.findById(restaurantId)
-        if(!restaurant){
+        if (!restaurant) {
             res.status(404).json({ message: "Restaurant not found" });
             return;
         }
 
         // Verify Restaurant is approved
-        if(restaurant.status !== "appeoved"){
+        if (restaurant.status !== "approved") {
             res.status(400).json({ message: "Reservation are not open for this restaurant yet" });
             return;
         }
 
         //Verify seat avilebility
-        const requestedGuests =Number(guests);
+        const requestedGuests = Number(guests);
         const exitingBookings = await Booking.find({
             restaurant: restaurantId,
             date: new Date(date),
@@ -36,14 +36,14 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
             status: "confirmed",
         })
 
-        const bookedSeats = exitingBookings.reduce((sum, b)=>sum + b.guests,0)
-       
+        const bookedSeats = exitingBookings.reduce((sum, b) => sum + b.guests, 0)
+
         const totalSeats = restaurant.totalSeats || 20;
         const avilableSeats = totalSeats - bookedSeats;
 
-        if(requestedGuests > avilableSeats){
+        if (requestedGuests > avilableSeats) {
             res.status(400).json({
-                message: 'Unable to reserve. Only ${avilableSeats} seats are available for this time slot.',
+                message: `Unable to reserve. Only ${avilableSeats} seats are available for this time slot.`,
             })
         }
 
@@ -66,7 +66,7 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
     } catch (error: any) {
         console.error(error);
         res.status(400).json({ message: error.message });
-        
+
     }
 }
 
@@ -75,14 +75,14 @@ export const createBooking = async (req: AuthRequest, res: Response): Promise<vo
 // @access Private
 export const getMyBooking = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-        const bookings = await Booking.find({ user: req.user?._id }).populate("restaurant", "name location image address slug" ).sort({date: -1, time: -1})
+        const bookings = await Booking.find({ user: req.user?._id }).populate("restaurant", "name location image address slug").sort({ date: -1, time: -1 })
 
-       res.json(bookings); 
+        res.json(bookings);
 
     } catch (error: any) {
         console.error(error);
         res.status(400).json({ message: error.message });
-        
+
     }
 }
 
@@ -92,29 +92,29 @@ export const getMyBooking = async (req: AuthRequest, res: Response): Promise<voi
 // @access Private
 export const cancleBooking = async (req: AuthRequest, res: Response): Promise<void> => {
     try {
-        
-       const booking = await Booking.findById(req.params.id);
 
-       if(!booking){
-        res.status(404).json({ message: "Booking not found" });
-        return;
-       }
+        const booking = await Booking.findById(req.params.id);
 
-       // Verify user owns the booking
-       if(booking.user.toString() !== req.user?._id.toString()){
-        res.status(401).json({ message: "Not authorized to cancle this booking"});
-        return;
-       }
+        if (!booking) {
+            res.status(404).json({ message: "Booking not found" });
+            return;
+        }
 
-       booking.status = "cancelled";
-       await booking.save();
+        // Verify user owns the booking
+        if (booking.user.toString() !== req.user?._id.toString()) {
+            res.status(401).json({ message: "Not authorized to cancle this booking" });
+            return;
+        }
 
-       const populateBooking = await booking.populate("restaurant", "name location Image address")
-       res.json(populateBooking);
+        booking.status = "cancelled";
+        await booking.save();
+
+        const populateBooking = await booking.populate("restaurant", "name location Image address")
+        res.json(populateBooking);
 
     } catch (error: any) {
         console.error(error);
         res.status(400).json({ message: error.message });
-        
+
     }
 }
