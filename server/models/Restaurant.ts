@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose'
+import mongoose, { Document, model, Schema, Types } from 'mongoose'
 
 export interface IRestaurant extends Document {
     name: string;
@@ -54,4 +54,4 @@ const RestaurantSchema = new Schema<IRestaurant>(
 
 
 
-export const Restaurant = model<IRestaurant>("Restaurant", RestaurantSchema)
+export const Restaurant = (mongoose.models && mongoose.models.Restaurant) ? (mongoose.models.Restaurant as mongoose.Model<IRestaurant>) : model<IRestaurant>("Restaurant", RestaurantSchema)

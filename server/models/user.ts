@@ -1,4 +1,4 @@
-import { Document, model, Schema, Types } from 'mongoose'
+import mongoose, { Document, model, Schema, Types } from 'mongoose'
 
 export interface IUser extends Document {
     _id: Types.ObjectId;
@@ -31,4 +31,4 @@ UserSchema.set("toJSON", {
 })
 
 
-export const User = model<IUser>("User", UserSchema)
+export const User = (mongoose.models && mongoose.models.User) ? (mongoose.models.User as mongoose.Model<IUser>) : model<IUser>("User", UserSchema)
