@@ -9,12 +9,9 @@ import ownerRouter from "./routes/ownerRoutes.js";
 import adminRouter from "./routes/adminRoutes.js";
 const app = express();
 // Connect to MongoDB
-try {
-    await connectDB();
-}
-catch (err) {
+connectDB().catch((err) => {
     console.error("Failed to connect to MongoDB:", err);
-}
+});
 // Middleware
 app.use(cors());
 app.use(express.json());
