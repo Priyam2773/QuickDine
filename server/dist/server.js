@@ -15,6 +15,20 @@ connectDB().catch((err) => {
 // Middleware
 app.use(cors());
 app.use(express.json());
+// DB Connection Middleware for Serverless
+app.use(async (req, res, next) => {
+    try {
+        await connectDB();
+        next();
+    }
+    catch (err) {
+        console.error("Database connection middleware error:", err);
+        res.status(500).json({
+            message: "Database connection failed",
+            error: err.message
+        });
+    }
+});
 const port = process.env.PORT || 5000;
 app.get('/', (req, res) => {
     res.send('Server is Live!');
